@@ -1,8 +1,20 @@
-# Ignore all CSV, PyTorch model, and NumPy zip files
+# Ignore CSV, PyTorch, and NumPy files
 *.csv
 *.pt
 *.npz
 
-# Ignore the entire Input_files folder and everything inside it
+# Ignore Input_files and everything inside
 Input_files/
+
+# Ignore unused folder and everything inside
 unused/
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Optional: ignore VSCode and OS files
+.vscode/
+.DS_Store
