@@ -1,0 +1,14 @@
+How to run:
+#######################################################
+
+python -m model.gcn_model --data processed_data/gcn_data.pt --epochs 50 --lr 1e-3 --hidden_dim 64 --threshold 0.3 --output output/prediction_output.csv --device cpu
+
+#######################################################
+
+--data → path of PyG Data object (.pt)
+
+--epochs, --lr, --hidden_dim, --threshold → adjust as you will
+
+--output → path of CSV prediction output
+
+--device → 'cuda' or 'cpu'
