@@ -8,12 +8,12 @@ data_npz = np.load('processed_gcn_dataset.npz', allow_pickle=True)
 X = data_npz['X_proc']
 Y = data_npz['Y']
 
-# 1) Construct k-NN graph
+# Construct k-NN graph
 k = 8  # number of neighbors
 nbrs = NearestNeighbors(n_neighbors=k, algorithm='auto').fit(X)
 distances, indices = nbrs.kneighbors(X)
 
-# 2) Build symmetric edge_index
+# Build symmetric edge_index
 # indices[i] contains k neighbors of node i
 edge_index_list = []
 num_nodes = X.shape[0]
