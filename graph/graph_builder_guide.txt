@@ -1,0 +1,11 @@
+How to run:
+#######################################################
+
+python -m graph.graph_builder --input processed_data/processed_gcn_dataset.npz --output processed_data/gcn_data.pt --k 8 --metric euclidean --verbose
+
+#######################################################
+--k = number of neighbors
+
+--metric = 'euclidean' | 'cosine' | 'correlation'
+
+--verbose = show progress
