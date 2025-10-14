@@ -29,72 +29,63 @@ def build_combined(file_map: dict,
     dfs = []
     all_features = set()
 
-    # 1) Load each CSV and create initial label column
-    for name, path in file_map.items():
-        p = Path(path)
-        if not p.exists():
-            raise FileNotFoundError(f"{p} not found for disease {name}")
-        df = pd.read_csv(p)
+    # 1) Load each CSV
+    for i, (name, path) in enumerate(file_map.items(), 1):
+        print(f"[{i}/{len(file_map)}] Loading {name} from {path}...")
+        df = pd.read_csv(path)
         label_col = f'label_{name}'
-        # If disease column missing, create safe string for contains
         if disease_col in df.columns:
             df[label_col] = df[disease_col].astype(str).str.contains(name, case=False, na=False).astype(int)
         else:
-            # fallback: if dataset already contains label column or disease not provided
-            if label_col in df.columns:
-                df[label_col] = df[label_col].astype(int)
-            else:
-                # assume none
-                df[label_col] = 0
+            df[label_col] = df.get(label_col, pd.Series(0, index=df.index)).astype(int)
         dfs.append(df)
 
-        # collect feature columns (exclude metadata and label_*)
         feat_cols = [c for c in df.columns
                      if c not in [subj_col, class_col, disease_col, study_col]
                      and not c.startswith('label_')]
         all_features.update(feat_cols)
+        print(f"    {name}: {df.shape[0]} rows, {len(feat_cols)} features")
 
     all_features = sorted(list(all_features))
     label_cols = [f'label_{d}' for d in file_map.keys()]
 
-    # 2) Align features and labels in each df
+    # 2) Align features and labels
     for i, df in enumerate(dfs):
-        # add missing feature columns as zeros
+        print(f"[{i+1}/{len(dfs)}] Aligning features & labels for {list(file_map.keys())[i]}...")
         missing_feats = [f for f in all_features if f not in df.columns]
         if missing_feats:
             df = pd.concat([df, pd.DataFrame(0.0, index=df.index, columns=missing_feats)], axis=1)
-
-        # add missing label columns (default 0)
         for lbl in label_cols:
             if lbl not in df.columns:
                 df[lbl] = 0
-
-        # reorder: metadata -> features -> labels
         meta_cols = [c for c in [subj_col, class_col, disease_col, study_col] if c in df.columns]
         ordered = meta_cols + all_features + label_cols
         df = df[ordered]
         dfs[i] = df
 
-    # 3) Concatenate all dataframes
+    # 3) Concatenate
+    print("Concatenating dataframes...")
     combined = pd.concat(dfs, ignore_index=True)
+    print(f"Combined shape: {combined.shape}")
 
-    # 4) Handle duplicate subject_id: max for labels, mean for features
-    def agg_func(series):
-        if series.name in label_cols:
-            return series.max()
-        elif series.name in all_features:
-            return series.mean()
-        else:
-            nonnull = series.dropna()
-            return nonnull.iloc[0] if len(nonnull) > 0 else np.nan
-
+    # 4) Aggregate duplicates
     if subj_col in combined.columns:
+        print("Aggregating duplicate subjects...")
+        def agg_func(series):
+            if series.name in label_cols:
+                return series.max()
+            elif series.name in all_features:
+                return series.mean()
+            else:
+                nonnull = series.dropna()
+                return nonnull.iloc[0] if len(nonnull) > 0 else np.nan
         combined = combined.groupby(subj_col, sort=False).agg(agg_func).reset_index()
+        print(f"After aggregation: {combined.shape}")
 
-    # 5) Ensure labels are integers
+    # 5) Ensure labels integer
     combined[label_cols] = combined[label_cols].fillna(0).astype(int)
 
-    # 6) Extract raw feature matrix and label matrix
+    # 6) Extract matrices
     X_raw = combined[all_features].values.astype(float)
     Y = combined[label_cols].values.astype(int)
 
@@ -106,6 +97,7 @@ def preprocess_log_zscore(X: np.ndarray, eps: float = 1e-6):
     Log10 transform and z-score each feature (column-wise).
     Returns: X_z, mean, std_safe
     """
+    print("Preprocessing: log10 + z-score...")
     X_log = np.log10(X + eps)
     mean = X_log.mean(axis=0)
     std = X_log.std(axis=0)
