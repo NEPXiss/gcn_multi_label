@@ -384,9 +384,17 @@ def main():
     # Compute final metrics
     micro_f1 = f1_score(y_true, preds, average='micro', zero_division=0)
     macro_f1 = f1_score(y_true, preds, average='macro', zero_division=0)
-    print("Final metrics (using thresholds):")
-    print(f"  Micro F1: {micro_f1:.4f}")
-    print(f"  Macro F1: {macro_f1:.4f}")
+    print("\n--- Evaluation Summary ---")
+    print(f"Micro F1: {micro_f1:.4f}")
+    print(f"Macro F1: {macro_f1:.4f}")
+    # print(f"Hamming Loss: {metrics['hamming_loss']:.4f}")
+
+    print("\n--- Per-disease accuracy (%) ---")
+    disease_names = ['CRC', 'T2D', 'IBD', 'Cirrhosis', 'OBT']
+    for j, name in enumerate(disease_names):
+        correct = (y_true[:, j] == preds[:, j]).sum()
+        acc = correct / y_true.shape[0] * 100
+        print(f"{name}: {acc:.2f}%")
 
     # Save predictions CSV
     df = pd.DataFrame({'sample_id': np.arange(data.num_nodes)})
