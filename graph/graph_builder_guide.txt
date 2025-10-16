@@ -1,9 +1,19 @@
 How to run:
 #######################################################
 
-python -m graph.graph_builder --input processed_data/processed_gcn_dataset.npz --output processed_data/gcn_data.pt --k 8 --metric euclidean --verbose
+For default setting:
+
+python graph/graph_builder.py --verbose
 
 #######################################################
+
+For customized setting:
+
+python graph/graph_builder.py --k 10 --metric cosine --latent pca --latent-dim 32 --verbose
+
+#######################################################
+(gcn_data.pt will be generated. The file is located in /processed_data)
+
 --k = number of neighbors
 
 --metric = 'euclidean' | 'cosine' | 'correlation'
