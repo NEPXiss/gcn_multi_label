@@ -37,7 +37,7 @@ python -m data_pipeline.dataset --map_csv data_map.csv --out processed_data/proc
 
 ###
 
-You'll get the following output in this structure:
+You'll get the following output in this structure :
 
 processed_data/
 ├─ processed_gcn_dataset.npz

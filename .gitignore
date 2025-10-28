@@ -5,6 +5,7 @@
 
 # Ignore Input_files and everything inside
 Input_files/
+processed_data/
 
 # Ignore unused folder and everything inside
 unused/
