@@ -7,7 +7,7 @@ python -m model.train_with_domain_adaptation --data processed_data/gcn_data_da.p
 
 
 # 1. ใช้ dataset pipeline เดิม
-python -m data_pipeline.dataset --map_csv your_map.csv --out processed.npz
+python -m data_pipeline.dataset --map_csv data_map.csv --out processed.npz
 
 # 2. Build graph แบบง่ายก่อน (ไม่มี DA encoder)
 python -m graph.graph_builder --input processed.npz --output gcn_data.pt
