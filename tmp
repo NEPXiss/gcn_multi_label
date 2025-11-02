@@ -1,0 +1,8 @@
+# 1. Prepare dataset with class column
+python -m data_pipeline.dataset_with_class_column --map_csv data_map.csv --out processed_data/processed.npz
+
+# 2. Build semi-supervised graph
+python -m graph.graph_builder_semi_supervised --input processed_data/processed.npz --output processed_data/gcn_semi_sup.pt --k 8
+
+# 3. Train with semi-supervised learning
+python -m model.semi_supervised_training --data processed_data/gcn_semi_sup.pt --da-method mmd --da-weight 0.1 --epochs 100 --save-model processed_data/final_model.pt
