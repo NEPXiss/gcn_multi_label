@@ -21,3 +21,6 @@ The implementation is original and follows the conceptual framework of GDmicro f
 ## Project Status
 
 This repository represents work in progress. The project is inspired by GDmicro and is being developed as part of my Bioinformatics course. Further implementation and guidelines will be added.
+
+## Environment Setup (Require Conda)
+```conda env create -f clean_environment.yml --name gcn_multi```
