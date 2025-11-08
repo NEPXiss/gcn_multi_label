@@ -1,5 +1,6 @@
 # Ignore CSV, PyTorch, and NumPy files
 *.csv
+!data_map.csv
 *.pt
 *.npz
 

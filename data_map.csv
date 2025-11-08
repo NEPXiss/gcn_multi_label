@@ -1,0 +1,6 @@
+disease,path
+CRC,Input_files/CRC.csv
+T2D,Input_files/T2D.csv
+OBT,Input_files/Obt.csv
+IBD,Input_files/IBD.csv
+Cirrhosis,Input_files/cirrhosis.csv
