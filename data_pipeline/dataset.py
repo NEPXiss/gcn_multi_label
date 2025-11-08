@@ -3,7 +3,7 @@ data_pipeline/dataset.py
 Refactor of generate_dataset.py
 
 Usage:
-    python -m data_pipeline.dataset --map_csv path/to/file_map.csv --out processed_gcn_dataset.npz --csv_out combined.csv
+    python -m data_pipeline.dataset --map_csv [PATH/TO/FILE_MAP.csv] --out processed_gcn_dataset.npz --csv_out combined.csv
 
 The map_csv must be a CSV with two columns: "disease" and "path".
 """

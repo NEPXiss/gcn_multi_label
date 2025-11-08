@@ -1,0 +1,22 @@
+python -m model.train_with_domain_adaptation --data processed_data/gcn_data.pt --da-method mmd --da-weight 0.1 --latent-dim 128 --epochs 100 --save-model processed_data/gcn_model_da.pt
+python -m graph.graph_builder_with_da --input processed_data/processed_gcn_dataset.npz --encoder-model processed_data/gcn_model_da.pt --output processed_data/gcn_data_da_refined.pt --k 8
+
+python -m graph.graph_builder_with_da --input processed_data/processed_gcn_dataset.npz --output processed_data/gcn_data_da.pt --latent-dim 128 --pretrain-epochs 50 --k 8
+
+python -m model.train_with_domain_adaptation --data processed_data/gcn_data_da.pt --da-method mmd --da-weight 0.1 --latent-dim 128 --hidden-dim 64 --epochs 100 --lr 1e-3 --dropout 0.3 --val-split 0.2 --early-stop 15 --use-posweight --save-model processed_data/final_gcn_da.pt
+
+
+# 1. ใช้ dataset pipeline เดิม
+python -m data_pipeline.dataset --map_csv data_map.csv --out processed.npz
+
+# 2. Build graph แบบง่ายก่อน (ไม่มี DA encoder)
+python -m graph.graph_builder --input processed.npz --output gcn_data.pt
+
+# 3. Train ด้วย DA
+python -m model.train_with_domain_adaptation --data gcn_data.pt --da-method mmd --da-weight 0.1 --epochs 100 --save-model model_da.pt
+
+# 4. ถ้าผลดี ค่อย rebuild graph ด้วย learned encoder
+python -m graph.graph_builder_with_da --input processed.npz --encoder-model model_da.pt --output gcn_data_refined.pt
+
+# 5. Train อีกครั้งด้วย refined graph
+python -m model.train_with_domain_adaptation --data gcn_data_refined.pt --da-method mmd --da-weight 0.1 --epochs 100
