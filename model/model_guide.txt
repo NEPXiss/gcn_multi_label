@@ -1,52 +1,52 @@
 How to run:
 #######################################################
 
-ตัวอย่าง
+Example
 
 python model/gcn_model.py --epochs 50 --hidden_dim 64 --use-posweight --tune-thresholds --val-split 0.2
 
 #######################################################
 
-ทุก flag ที่สำคัญ (อธิบายทีละอัน)
+Important Flags
 
---data : path ของ PyG Data object (default: processed_data/gcn_data.pt).
+--data : path of PyG Data object (default: processed_data/gcn_data.pt).
 
---epochs : จำนวน epoch ในการฝึก (default: 100).
+--epochs : Number of epoch in training (default: 100).
 
 --lr : learning rate (default: 1e-3).
 
---hidden_dim : ขนาดมิติซ่อนของ GCN (default: 64).
+--hidden_dim : hidden_dim of GCN (default: 64).
 
---weight_decay : L2 weight decay สำหรับ optimizer.
+--weight_decay : L2 weight decay for optimizer.
 
---dropout : dropout rate ในโมเดล.
+--dropout : dropout rate in model.
 
---batchnorm : ถ้ามี flag นี้จะเปิด BatchNorm (default off).
+--batchnorm : if flaged, BatchNorm is enabled (default off).
 
---layernorm : ถ้ามี flag นี้จะเปิด LayerNorm (default off).
+--layernorm : if flaged, LayerNorm is enabled (default off).
 
---device : 'cpu' หรือ 'cuda' (default: auto detect).
+--device : 'cpu' or 'cuda' (default: auto detect).
 
---save-model : path สำหรับบันทึก state_dict ของโมเดล (default: processed_data/gcn_model.pt).
+--save-model : path for storing state_dict of the model (default: processed_data/gcn_model.pt).
 
---output : path สำหรับ prediction CSV (default: processed_data/prediction_output.csv).
+--output : path of prediction CSV (default: processed_data/prediction_output.csv).
 
---val-split : สัดส่วน validation (node-level random split) เช่น 0.2 = 20% validation. ถ้า 0 จะไม่มี validation (แต่จะไม่ tune thresholds ด้วย).
+--val-split : validation ratio (node-level random split); for example, 0.2 = 20% validation. if 0, then no validation (will not tune thresholds).
 
---seed : seed สำหรับสุ่ม (reproducibility).
+--seed : seed (reproducibility).
 
---early-stop : จำนวน epoch ที่รอเมื่อไม่มีการปรับปรุง validation micro-F1 (default: 15).
+--early-stop : Number of epoch for early stop if no improvement -> validation micro-F1 (default: 15).
 
---tune-thresholds : ถ้เปิด จะรับ thresholds ที่ tune (training wrapper already tunes on val and returns best thresholds).
+--tune-thresholds : if enabled, turn on thresholds for tune (training wrapper already tunes on val and returns best thresholds).
 
---use-posweight : คำนวณ pos_weight จาก labels และใส่เข้า BCEWithLogitsLoss เพื่อชดเชย class imbalance.
+--use-posweight : Calculate pos_weight from labels and input to BCEWithLogitsLoss to compensate class imbalance.
 
 #########################################
 
-ผลลัพธ์ที่ได้หลังรัน
+Expected Outcome:
 
-processed_data/gcn_model.pt (default) — ไฟล์ state_dict ของโมเดล (คุณสามารถโหลดด้วย model.load_state_dict(torch.load(path)))
+processed_data/gcn_model.pt (default) — state_dict file of the model (you can load using model.load_state_dict(torch.load(path)))
 
-processed_data/prediction_output.csv — ตารางที่เก็บ sample_id, true_label_{j}, prob_label_{j}, pred_label_{j} สำหรับแต่ละ label (j = 0..D-1)
+processed_data/prediction_output.csv — csv for sample_id, true_label_{j}, prob_label_{j}, pred_label_{j} for all labels (j = 0..D-1)
 
-ข้อความสรุป metric (micro_F1, macro_F1 ฯลฯ) จะพิมพ์บน terminal
+Short message describing the metric (micro_F1, macro_F1) is printed on terminal
