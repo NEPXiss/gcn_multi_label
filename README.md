@@ -23,4 +23,33 @@ The implementation is original and follows the conceptual framework of GDmicro f
 This repository represents work in progress. The project is inspired by GDmicro and is being developed as part of my Bioinformatics course. Further implementation and guidelines will be added.
 
 ## Environment Setup (Require Conda)
-```conda env create -f clean_environment.yml --name gcn_multi```
+
+`conda env create -f clean_environment.yml --name gcn_multi`
+
+## Quick Start
+
+### 1. Prepare Data
+
+```bash
+python -m data_pipeline.dataset --map_csv data_map.csv --out processed_data/processed_gcn_dataset.npz
+```
+
+### 2. Build Graph
+
+```bash
+python graph/graph_builder.py --k 10 --metric cosine --verbose
+```
+
+### 3. Train Model
+
+```bash
+python model/gcn_model.py --epochs 50 --hidden_dim 64 --use-posweight --tune-thresholds --val-split 0.2
+```
+
+### 4. Analyze Feature Importance
+
+```bash
+python -m model.feature_importance --model processed_data/gcn_model.pt --data processed_data/gcn_data.pt --method integrated_gradients
+```
+
+See [FEATURE_IMPORTANCE_GUIDE.md](FEATURE_IMPORTANCE_GUIDE.md) for detailed instructions on interpreting which bacterial features are important for disease prediction.
