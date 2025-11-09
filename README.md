@@ -14,6 +14,8 @@ This project is a from-scratch implementation inspired by the GDmicro framework.
 
 - Construction of k-nearest neighbor graphs from sample features.
 
+- Implementation of Domain Adaptation Network and Feature Importance
+
 - Multi-label sigmoid output with binary cross-entropy loss for multi-disease prediction.
 
 The implementation is original and follows the conceptual framework of GDmicro for academic exploration.

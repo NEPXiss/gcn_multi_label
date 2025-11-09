@@ -1,14 +1,14 @@
-How to run:
-#######################################################
+## How to run:
 
 Example
 
+```
 python model/gcn_model.py --epochs 50 --hidden_dim 64 --use-posweight --tune-thresholds --val-split 0.2
+```
 
-#######################################################
+## Important Flags
 
-Important Flags
-
+```
 --data : path of PyG Data object (default: processed_data/gcn_data.pt).
 
 --epochs : Number of epoch in training (default: 100).
@@ -40,13 +40,14 @@ Important Flags
 --tune-thresholds : if enabled, turn on thresholds for tune (training wrapper already tunes on val and returns best thresholds).
 
 --use-posweight : Calculate pos_weight from labels and input to BCEWithLogitsLoss to compensate class imbalance.
+```
 
-#########################################
+## Expected Outcome:
 
-Expected Outcome:
-
+```
 processed_data/gcn_model.pt (default) — state_dict file of the model (you can load using model.load_state_dict(torch.load(path)))
+```
 
-processed_data/prediction_output.csv — csv for sample_id, true_label_{j}, prob_label_{j}, pred_label_{j} for all labels (j = 0..D-1)
+- processed_data/prediction_output.csv — csv for sample_id, true_label_{j}, prob_label_{j}, pred_label_{j} for all labels (j = 0..D-1)
 
-Short message describing the metric (micro_F1, macro_F1) is printed on terminal
+- Short message describing the metric (micro_F1, macro_F1) is printed on terminal
