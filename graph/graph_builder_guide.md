@@ -1,19 +1,19 @@
-How to run:
-#######################################################
+# How to run:
 
-For default setting:
-
+## For default setting:
+```
 python graph/graph_builder.py --verbose
+```
 
-#######################################################
-
-For customized setting:
-
+## For customized setting:
+```
 python graph/graph_builder.py --k 10 --metric cosine --latent pca --latent-dim 32 --verbose
+```
 
-#######################################################
+# Output
 (gcn_data.pt will be generated. The file is located in /processed_data)
 
+# Flags
 --k = number of neighbors
 
 --metric = 'euclidean' | 'cosine' | 'correlation'
