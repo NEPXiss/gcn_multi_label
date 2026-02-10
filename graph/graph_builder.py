@@ -1,16 +1,3 @@
-# graph/graph_builder.py
-"""
-Refined graph_builder for GCN multi-label project (Phase 1 ready)
-
-Features:
-- CLI compatible with previous script (defaults preserved)
-- Supports metric: 'euclidean', 'cosine', 'correlation'
-- Optional latent embedding via PCA (use --latent pca --latent-dim N)
-- Builds weighted k-NN graph (edge_weight) and optionally symmetrize & normalize
-- Saves a torch_geometric.data.Data object with fields: x, y, edge_index, edge_weight
-- Default output: processed_data/gcn_data.pt (matching your workflow)
-"""
-
 import argparse
 from pathlib import Path
 import numpy as np

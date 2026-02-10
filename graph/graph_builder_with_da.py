@@ -1,16 +1,9 @@
-# graph/graph_builder_with_da.py
-"""
-Graph builder that uses learned latent features from Domain Adaptation Encoder
-This ensures the k-NN graph is built on domain-invariant representations
-"""
-
 import argparse
 from pathlib import Path
 import numpy as np
 import torch
 from torch_geometric.data import Data
 
-# Import your existing graph building functions
 import sys
 sys.path.append('..')
 from graph.graph_builder import build_knn_graph
@@ -77,9 +70,6 @@ def build_graph_with_encoder(
         verbose=verbose
     )
     
-    # Create PyG Data object
-    # IMPORTANT: Store ORIGINAL features as x, not latent
-    # The model will encode them again during training
     x_t = torch.tensor(X_raw, dtype=torch.float32)
     y_t = torch.tensor(Y, dtype=torch.float32)
     
@@ -90,7 +80,6 @@ def build_graph_with_encoder(
         y=y_t
     )
     
-    # Optionally store latent features for inspection
     data.latent_features = torch.tensor(latent_features, dtype=torch.float32)
     
     if verbose:
@@ -109,7 +98,6 @@ def pretrain_encoder_for_graph(
 ):
     """
     Pretrain encoder using reconstruction loss or contrastive learning
-    This is useful if you don't have domain labels yet
     
     Args:
         X_raw: [N, input_dim]
@@ -175,8 +163,6 @@ def pretrain_encoder_for_graph(
     
     return encoder
 
-
-# ============= Main Pipeline =============
 def main():
     parser = argparse.ArgumentParser(
         description="Build graph using latent features from Domain Adaptation Encoder"

@@ -1,12 +1,3 @@
-"""
-data_pipeline/dataset.py
-Refactor of generate_dataset.py
-
-Usage:
-    python -m data_pipeline.dataset --map_csv [PATH/TO/FILE_MAP.csv] --out processed_gcn_dataset.npz --csv_out combined.csv
-
-The map_csv must be a CSV with two columns: "disease" and "path".
-"""
 from pathlib import Path
 import argparse
 import numpy as np
@@ -23,8 +14,7 @@ def build_combined(file_map: dict,
                    class_col: str = 'class'):
     """
     Load per-disease CSVs, align feature columns, create multi-hot labels, and aggregate duplicate subjects.
-    Returns:
-        combined (pd.DataFrame), X_raw (np.ndarray), Y (np.ndarray), feature_cols (list), label_cols (list)
+    Returns: combined (pd.DataFrame), X_raw (np.ndarray), Y (np.ndarray), feature_cols (list), label_cols (list)
     """
     dfs = []
     all_features = set()
