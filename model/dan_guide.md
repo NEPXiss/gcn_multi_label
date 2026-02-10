@@ -14,25 +14,25 @@ python -m model.train_with_domain_adaptation --data processed_data/gcn_data_da.p
 
 # 1. Use original dataset pipeline
 ```
-python -m data_pipeline.dataset --map_csv data_map.csv --out processed.npz
+python -m data_pipeline.dataset --map_csv data_map.csv --out processed_data/processed_gcn_dataset.npz --csv_out processed_data/combined_dataset_with_labels.csv
 ```
 
 # 2. Build simple graph (No DA encoder)
 ```
-python -m graph.graph_builder --input processed.npz --output gcn_data.pt
+python -m graph.graph_builder --input processed_data/processed_gcn_dataset.npz --output processed_data/gcn_data.pt
 ```
 
 # 3. Train with DA
 ```
-python -m model.train_with_domain_adaptation --data gcn_data.pt --da-method mmd --da-weight 0.1 --epochs 100 --save-model model_da.pt
+python -m model.train_with_domain_adaptation --data processed_data/gcn_data.pt --da-method mmd --da-weight 0.1 --epochs 100 --save-model processed_data/model_da.pt
 ```
 
 # 4. If the result is desirable, then rebuild the graph with learned encoder
 ```
-python -m graph.graph_builder_with_da --input processed.npz --encoder-model model_da.pt --output gcn_data_refined.pt
+python -m graph.graph_builder_with_da --input processed_data/processed_gcn_dataset.npz --encoder-model processed_data/model_da.pt --output processed_data/gcn_data_refined.pt
 ```
 
 # 5. Train again with refined graph
 ```
-python -m model.train_with_domain_adaptation --data gcn_data_refined.pt --da-method mmd --da-weight 0.1 --epochs 100
+python -m model.train_with_domain_adaptation --data processed_data/gcn_data_refined.pt --da-method mmd --da-weight 0.1 --epochs 100
 ```
